@@ -67,6 +67,18 @@
                 hasError = true;
                 errors.push('Name: Fill correctly');
             }
+
+            // Year of Birth validation
+            const yearOfBirth = parseInt(document.getElementById('yearOfBirth').value);
+            const yearOfBirthError = document.getElementById('yearOfBirthError');
+            const currentYear = new Date().getFullYear();
+            if (isNaN(yearOfBirth) || currentYear - yearOfBirth <= 18) {
+                yearOfBirthError.innerText = 'You are not old enough to register';
+                hasError = true;
+                errors.push('Year of Birth: You are not old enough to register');
+            }
+
+            
         });
     </script>
 </body>
