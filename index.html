@@ -100,6 +100,15 @@
                 passwordWarning.innerText = 'The password is weak';
             }
 
+            // Terms and conditions validation
+            const terms = document.getElementById('terms').checked;
+            const termsError = document.getElementById('termsError');
+            if (!terms) {
+                termsError.innerText = 'In order to register you need to accept our terms';
+                hasError = true;
+                errors.push('Terms: In order to register you need to accept our terms');
+            }
+
         });
     </script>
 </body>
