@@ -78,6 +78,16 @@
                 errors.push('Year of Birth: You are not old enough to register');
             }
 
+            // Email validation
+            const email = document.getElementById('email').value;
+            const emailError = document.getElementById('emailError');
+            const emailRegex = /^[a-zA-Z0-9]+@[a-zA-Z]+\.[a-zA-Z]+$/;
+            if (!emailRegex.test(email)) {
+                emailError.innerText = 'The filled data is in wrong format';
+                hasError = true;
+                errors.push('Email: The filled data is in wrong format');
+            }
+
             
         });
     </script>
