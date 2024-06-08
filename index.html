@@ -88,7 +88,18 @@
                 errors.push('Email: The filled data is in wrong format');
             }
 
-            
+            // Password validation
+            const password = document.getElementById('password').value;
+            const passwordError = document.getElementById('passwordError');
+            const passwordWarning = document.getElementById('passwordWarning');
+            if (password.length <= 3) {
+                passwordError.innerText = 'The password must contain more than 3 symbols';
+                hasError = true;
+                errors.push('Password: The password must contain more than 3 symbols');
+            } else if (password.length <= 5) {
+                passwordWarning.innerText = 'The password is weak';
+            }
+
         });
     </script>
 </body>
