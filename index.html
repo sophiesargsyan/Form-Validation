@@ -49,82 +49,121 @@
     </div>
 
     <script>
-        document.getElementById('registrationForm').addEventListener('submit', function(event) {
-            event.preventDefault();
-            let hasError = false;
-            let errors = [];
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('registrationForm');
 
-            document.querySelectorAll('.error').forEach(error => error.innerText = '');
-            document.querySelectorAll('.text-warning').forEach(warning => warning.innerText = '');
-            document.getElementById('alert-container').innerHTML = '';
+            form.addEventListener('submit', function(event) {
+                event.preventDefault();
+                let hasError = false;
+                let errors = [];
 
-            // Name validation
-            const name = document.getElementById('name').value;
-            const nameError = document.getElementById('nameError');
-            const nameRegex = /^[a-zA-Z]+$/;
-            if (!nameRegex.test(name)) {
-                nameError.innerText = 'Fill correctly';
-                hasError = true;
-                errors.push('Name: Fill correctly');
+                document.querySelectorAll('.error').forEach(error => error.innerText = '');
+                document.querySelectorAll('.text-warning').forEach(warning => warning.innerText = '');
+                document.getElementById('alert-container').innerHTML = '';
+
+                // Validate all fields before submitting
+                if (!validateName(errors) || !validateYearOfBirth(errors) || !validateEmail(errors) || !validatePassword(errors) || !validateTerms(errors)) {
+                    hasError = true;
+                }
+
+                // Alert message
+                if (hasError) {
+                    displayAlert(errors, 'alert-danger');
+                } else {
+                    displayAlert(['Registration was successful!'], 'alert-success');
+                    
+                    // Reset form 
+                    form.reset();
+                }
+            });
+
+            document.getElementById('name').addEventListener('blur', () => validateName([]));
+            document.getElementById('yearOfBirth').addEventListener('blur', () => validateYearOfBirth([]));
+            document.getElementById('email').addEventListener('blur', () => validateEmail([]));
+            document.getElementById('password').addEventListener('blur', () => validatePassword([]));
+            document.getElementById('terms').addEventListener('change', () => validateTerms([]));
+
+            function validateName(errors) {
+                const name = document.getElementById('name').value;
+                const nameError = document.getElementById('nameError');
+                const nameRegex = /^[a-zA-Z]+$/;
+                if (!nameRegex.test(name)) {
+                    nameError.innerText = 'Fill correctly';
+                    errors.push('Name: Fill correctly');
+                    return false;
+                } else {
+                    nameError.innerText = '';
+                    return true;
+                }
             }
 
-            // Year of Birth validation
-            const yearOfBirth = parseInt(document.getElementById('yearOfBirth').value);
-            const yearOfBirthError = document.getElementById('yearOfBirthError');
-            const currentYear = new Date().getFullYear();
-            if (isNaN(yearOfBirth) || currentYear - yearOfBirth <= 18) {
-                yearOfBirthError.innerText = 'You are not old enough to register';
-                hasError = true;
-                errors.push('Year of Birth: You are not old enough to register');
+            function validateYearOfBirth(errors) {
+                const yearOfBirth = parseInt(document.getElementById('yearOfBirth').value);
+                const yearOfBirthError = document.getElementById('yearOfBirthError');
+                const currentYear = new Date().getFullYear();
+                if (isNaN(yearOfBirth) || currentYear - yearOfBirth <= 18) {
+                    yearOfBirthError.innerText = 'You are not old enough to register';
+                    errors.push('Year of Birth: You are not old enough to register');
+                    return false;
+                } else {
+                    yearOfBirthError.innerText = '';
+                    return true;
+                }
             }
 
-            // Email validation
-            const email = document.getElementById('email').value;
-            const emailError = document.getElementById('emailError');
-            const emailRegex = /^[a-zA-Z0-9]+@[a-zA-Z]+\.[a-zA-Z]+$/;
-            if (!emailRegex.test(email)) {
-                emailError.innerText = 'The filled data is in wrong format';
-                hasError = true;
-                errors.push('Email: The filled data is in wrong format');
+            function validateEmail(errors) {
+                const email = document.getElementById('email').value;
+                const emailError = document.getElementById('emailError');
+                const emailRegex = /^[a-zA-Z0-9]+@[a-zA-Z]+\.[a-zA-Z]+$/;
+                if (!emailRegex.test(email)) {
+                    emailError.innerText = 'The filled data is in wrong format';
+                    errors.push('Email: The filled data is in wrong format');
+                    return false;
+                } else {
+                    emailError.innerText = '';
+                    return true;
+                }
             }
 
-            // Password validation
-            const password = document.getElementById('password').value;
-            const passwordError = document.getElementById('passwordError');
-            const passwordWarning = document.getElementById('passwordWarning');
-            if (password.length <= 3) {
-                passwordError.innerText = 'The password must contain more than 3 symbols';
-                hasError = true;
-                errors.push('Password: The password must contain more than 3 symbols');
-            } else if (password.length <= 5) {
-                passwordWarning.innerText = 'The password is weak';
+            function validatePassword(errors) {
+                const password = document.getElementById('password').value;
+                const passwordError = document.getElementById('passwordError');
+                const passwordWarning = document.getElementById('passwordWarning');
+                if (password.length <= 3) {
+                    passwordError.innerText = 'The password must contain more than 3 symbols';
+                    passwordWarning.innerText = '';
+                    errors.push('Password: The password must contain more than 3 symbols');
+                    return false;
+                } else if (password.length <= 5) {
+                    passwordError.innerText = '';
+                    passwordWarning.innerText = 'The password is weak';
+                    return true;
+                } else {
+                    passwordError.innerText = '';
+                    passwordWarning.innerText = '';
+                    return true;
+                }
             }
 
-            // Terms and conditions validation
-            const terms = document.getElementById('terms').checked;
-            const termsError = document.getElementById('termsError');
-            if (!terms) {
-                termsError.innerText = 'In order to register you need to accept our terms';
-                hasError = true;
-                errors.push('Terms: In order to register you need to accept our terms');
+            function validateTerms(errors) {
+                const terms = document.getElementById('terms').checked;
+                const termsError = document.getElementById('termsError');
+                if (!terms) {
+                    termsError.innerText = 'In order to register you need to accept our terms';
+                    errors.push('Terms: In order to register you need to accept our terms');
+                    return false;
+                } else {
+                    termsError.innerText = '';
+                    return true;
+                }
             }
 
-            // Alert message
-            if (hasError) {
+            function displayAlert(messages, alertClass) {
                 const alertContainer = document.getElementById('alert-container');
                 const alertElement = document.createElement('div');
-                alertElement.classList.add('alert', 'alert-danger');
-                alertElement.innerHTML = '<ul>' + errors.map(error => `<li>${error}</li>`).join('') + '</ul>';
+                alertElement.classList.add('alert', alertClass);
+                alertElement.innerHTML = '<ul>' + messages.map(message => `<li>${message}</li>`).join('') + '</ul>';
                 alertContainer.appendChild(alertElement);
-            } else {
-                const alertContainer = document.getElementById('alert-container');
-                const alertElement = document.createElement('div');
-                alertElement.classList.add('alert', 'alert-success');
-                alertElement.innerText = 'Registration was successful!';
-                alertContainer.appendChild(alertElement);
-                
-                // Reset form 
-                document.getElementById('registrationForm').reset();
             }
         });
     </script>
