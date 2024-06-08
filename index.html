@@ -109,6 +109,23 @@
                 errors.push('Terms: In order to register you need to accept our terms');
             }
 
+            // Alert message
+            if (hasError) {
+                const alertContainer = document.getElementById('alert-container');
+                const alertElement = document.createElement('div');
+                alertElement.classList.add('alert', 'alert-danger');
+                alertElement.innerHTML = '<ul>' + errors.map(error => `<li>${error}</li>`).join('') + '</ul>';
+                alertContainer.appendChild(alertElement);
+            } else {
+                const alertContainer = document.getElementById('alert-container');
+                const alertElement = document.createElement('div');
+                alertElement.classList.add('alert', 'alert-success');
+                alertElement.innerText = 'Registration was successful!';
+                alertContainer.appendChild(alertElement);
+                
+                // Reset form 
+                document.getElementById('registrationForm').reset();
+            }
         });
     </script>
 </body>
