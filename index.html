@@ -5,6 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registration Form</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .error {
+            color: red;
+        }
+        .alert-success {
+            color: green;
+        }
+    </style>
 </head>
 <body>
     <div class="container mt-5">
@@ -39,5 +47,27 @@
             <button type="submit" class="btn btn-primary mt-3">Register</button>
         </form>
     </div>
+
+    <script>
+        document.getElementById('registrationForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            let hasError = false;
+            let errors = [];
+
+            document.querySelectorAll('.error').forEach(error => error.innerText = '');
+            document.querySelectorAll('.text-warning').forEach(warning => warning.innerText = '');
+            document.getElementById('alert-container').innerHTML = '';
+
+            // Name validation
+            const name = document.getElementById('name').value;
+            const nameError = document.getElementById('nameError');
+            const nameRegex = /^[a-zA-Z]+$/;
+            if (!nameRegex.test(name)) {
+                nameError.innerText = 'Fill correctly';
+                hasError = true;
+                errors.push('Name: Fill correctly');
+            }
+        });
+    </script>
 </body>
 </html>
