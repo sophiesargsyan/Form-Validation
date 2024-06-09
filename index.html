@@ -61,18 +61,15 @@
                 document.querySelectorAll('.text-warning').forEach(warning => warning.innerText = '');
                 document.getElementById('alert-container').innerHTML = '';
 
-                // Validate all fields before submitting
                 if (!validateName(errors) || !validateYearOfBirth(errors) || !validateEmail(errors) || !validatePassword(errors) || !validateTerms(errors)) {
                     hasError = true;
                 }
 
-                // Alert message
                 if (hasError) {
                     displayAlert(errors, 'alert-danger');
                 } else {
                     displayAlert(['Registration was successful!'], 'alert-success');
                     
-                    // Reset form 
                     form.reset();
                 }
             });
